@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/auth_page.dart';
-
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_1/pages/login.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -16,9 +16,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: LoginPage(),
     );
   }
 }
