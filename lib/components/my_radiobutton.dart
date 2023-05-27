@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/login.dart';
 
-enum UserType { Student, Warden }
+enum UserType { Student, Warden, userType }
 
 class MyRadioButton extends StatelessWidget {
   MyRadioButton(
@@ -19,15 +19,18 @@ class MyRadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: RadioListTile<UserType>(
-          value: value,
-          groupValue: selectedUserType,
-          title: Text(title),
-          tileColor: Colors.black12,
-          dense: true,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-          onChanged: onChanged),
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: RadioListTile<UserType>(
+            value: value,
+            groupValue: selectedUserType,
+            title: Text(title),
+            tileColor: Colors.black12,
+            dense: true,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            onChanged: onChanged),
+      ),
     );
   }
 }
