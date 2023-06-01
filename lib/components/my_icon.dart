@@ -3,6 +3,8 @@ import 'package:flutter_application_1/pages/attendence.dart';
 import 'package:flutter_application_1/pages/canteen_page.dart';
 import 'package:flutter_application_1/pages/cleaning_page.dart';
 import 'package:flutter_application_1/pages/warden_attendence.dart';
+import 'package:flutter_application_1/pages/warden_canteen.dart';
+import 'package:flutter_application_1/pages/warden_cleaning.dart';
 import 'package:flutter_application_1/pages/warden_complaint.dart';
 
 import '../pages/complaint_page.dart';
@@ -51,13 +53,23 @@ class MyIcon extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => MyAttendence()));
               }
             }
+
             if (user == 'Warden') {
+              if (id == '1') {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => WardenCanteen()));
+              }
               if (id == '2') {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => WardenComplaints()));
               }
+              if (id == '3') {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => WardenCleaning()));
+              }
+
               if (id == '4') {
                 Navigator.push(
                     context,
@@ -66,6 +78,7 @@ class MyIcon extends StatelessWidget {
               }
             }
           },
+          highlightColor: Colors.transparent,
           splashColor: Colors.black26,
           child: Column(
             mainAxisSize: MainAxisSize.min,

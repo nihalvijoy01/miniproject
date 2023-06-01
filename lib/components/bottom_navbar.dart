@@ -14,6 +14,7 @@ class _BottomNavState extends State<BottomNav> {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.grey[300],
         //selectedItemColor: Colors.red,
         //unselectedItemColor: Colors.black,
         currentIndex: currentIndex,

@@ -24,8 +24,7 @@ class HomePage extends StatelessWidget {
         body: SafeArea(
           child: Center(
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+
             children: [
               SizedBox(
                 height: 20,
@@ -35,17 +34,16 @@ class HomePage extends StatelessWidget {
                   Text(
                     "Student Dashboard!",
                     textAlign: TextAlign.start,
-                    style: const TextStyle(fontSize: 30, color: Colors.black87),
+                    style: const TextStyle(fontSize: 30, color: Colors.black87,fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    width: 30,
+                    width: 60,
                   ),
                   IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))
                 ],
               ),
               SizedBox(
-                height: 30,
-                width: 10,
+                height: 80,
               ),
               //icon 1
 
@@ -53,11 +51,12 @@ class HomePage extends StatelessWidget {
                 children: const [
                   SizedBox(
                     height: 10,
+                    width: 40,
                   ),
                   MyIcon(
                     user: 'Student',
                     id: "1",
-                    img: 'lib/images/canteen.png',
+                    img: 'lib/images/canteen(1).png',
                     iconText: 'canteen',
                   ),
 
@@ -70,7 +69,7 @@ class HomePage extends StatelessWidget {
                   MyIcon(
                     user: 'Student',
                     id: "2",
-                    img: 'lib/images/complain.png',
+                    img: 'lib/images/complain (2).png',
                     iconText: 'complaints',
                   ),
                 ],
@@ -80,13 +79,16 @@ class HomePage extends StatelessWidget {
               ),
 
               //icon 3
-
+ 
               Row(
                 children: [
+                  const SizedBox(
+                    width: 40,
+                  ),
                   MyIcon(
                       user: 'Student',
                       id: "3",
-                      img: 'lib/images/cleaning.png',
+                      img: 'lib/images/oosouji.png',
                       iconText: 'cleaning'),
                   const SizedBox(
                     height: 10,
@@ -97,7 +99,7 @@ class HomePage extends StatelessWidget {
                   MyIcon(
                       user: 'Student',
                       id: "4",
-                      img: 'lib/images/immigration.png',
+                      img: 'lib/images/calendar.png',
                       iconText: 'attendence'),
                 ],
               )

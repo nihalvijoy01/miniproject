@@ -28,12 +28,20 @@ class _LoginPageState extends State<LoginPage> {
 
   //sign user in method
   void signUserIn() async {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => AuthPage(
-          userType: _userType,
-        )));
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: usernameController.text, password: passwordController.text);
+    try {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => AuthPage(
+                userType: _userType,
+              )));
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: usernameController.text, password: passwordController.text);
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("invalid username or password"),
+        ),
+      );
+    }
   }
 
   @override
@@ -53,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                       'lib/images/hostel.png',
                       height: 150,
                     ),
-    
+
                     SizedBox(height: 20),
                     //app name
                     Text(
@@ -64,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-    
+
                     //user class
                     /*Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                     UserButton(buttonText: "Warden")
                   ],
                 ),**/
-    
+
                     Row(children: [
                       MyRadioButton(
                           title: UserType.Student.name,
@@ -99,11 +107,11 @@ class _LoginPageState extends State<LoginPage> {
                             });
                           })
                     ]),
-    
+
                     const SizedBox(
                       height: 10,
                     ),
-    
+
                     //user name text field
                     MyTextField(
                       controller: usernameController,
@@ -120,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                     ),
                     const SizedBox(height: 25),
-    
+
                     //forgot password
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25.0),

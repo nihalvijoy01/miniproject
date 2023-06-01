@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/base_layout.dart';
 import 'package:flutter_application_1/components/bottom_navbar.dart';
@@ -6,6 +7,10 @@ import '../components/my_icon.dart';
 
 class WardenHome extends StatelessWidget {
   const WardenHome({super.key});
+
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,28 +24,31 @@ class WardenHome extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            Text(
-              "Warden Dashboard",
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800]),
+            Row(
+              children: [
+                Text(
+                  "Warden Dashboard",
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[800]),
+                ),
+                IconButton(onPressed: signUserOut, icon: Icon(Icons.logout)),
+              ],
             ),
             SizedBox(
-              height: 30,
+              height: 80,
               width: 10,
             ),
             //icon 1
 
             Row(
               children: const [
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10, width: 40),
                 MyIcon(
                   user: 'Warden',
                   id: "1",
-                  img: 'lib/images/canteen.png',
+                  img: 'lib/images/canteen(1).png',
                   iconText: 'canteen',
                 ),
 
@@ -53,7 +61,7 @@ class WardenHome extends StatelessWidget {
                 MyIcon(
                   user: 'Warden',
                   id: "2",
-                  img: 'lib/images/complain.png',
+                  img: 'lib/images/complain (2).png',
                   iconText: 'complaints',
                 ),
               ],
@@ -66,10 +74,14 @@ class WardenHome extends StatelessWidget {
 
             Row(
               children: [
+                const SizedBox(
+                  height: 30,
+                  width: 40,
+                ),
                 MyIcon(
                     user: 'Warden',
                     id: "3",
-                    img: 'lib/images/cleaning.png',
+                    img: 'lib/images/oosouji.png',
                     iconText: 'cleaning'),
                 const SizedBox(
                   height: 10,
@@ -80,7 +92,7 @@ class WardenHome extends StatelessWidget {
                 MyIcon(
                     user: 'Warden',
                     id: "4",
-                    img: 'lib/images/immigration.png',
+                    img: 'lib/images/calendar.png',
                     iconText: 'attendence'),
               ],
             )
