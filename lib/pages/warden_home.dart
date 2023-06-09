@@ -2,14 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/base_layout.dart';
 import 'package:flutter_application_1/components/bottom_navbar.dart';
+import 'package:flutter_application_1/pages/login.dart';
 
 import '../components/my_icon.dart';
 
 class WardenHome extends StatelessWidget {
   const WardenHome({super.key});
 
-  void signUserOut() {
+  Future<void> signUserOut(BuildContext context) async {
     FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
   }
 
   @override
@@ -33,7 +38,9 @@ class WardenHome extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: Colors.grey[800]),
                 ),
-                IconButton(onPressed: signUserOut, icon: Icon(Icons.logout)),
+                IconButton(
+                    onPressed: () => signUserOut(context),
+                    icon: Icon(Icons.logout)),
               ],
             ),
             SizedBox(
@@ -94,6 +101,17 @@ class WardenHome extends StatelessWidget {
                     id: "4",
                     img: 'lib/images/calendar.png',
                     iconText: 'attendence'),
+
+                //icon 5
+              ],
+            ),
+            Row(
+              children: [
+                MyIcon(
+                    img: 'lib/images/complain.png',
+                    iconText: 'add students',
+                    id: '5',
+                    user: 'Warden')
               ],
             )
           ],

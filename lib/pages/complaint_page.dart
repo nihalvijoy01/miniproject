@@ -1,15 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/base_layout.dart';
 
 final _formKey = GlobalKey<FormState>();
 final db = FirebaseFirestore.instance;
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class MyComplaints extends StatelessWidget {
   MyComplaints({super.key});
 
   String? compSub;
   String? compDesc;
+  bool active_status = true;
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +87,24 @@ class MyComplaints extends StatelessWidget {
                           );
                         }
                         _formKey.currentState!.save();
+                        //get user id
+                        final User? user = auth.currentUser;
+                        final String? docid = user?.uid;
+
                         final complaint = <String, dynamic>{
                           "Subject": compSub,
                           "description": compDesc,
+                          "active_status": active_status
                         };
-                        db.collection("Complaints").add(complaint).then(
-                            (DocumentReference doc) => print(
-                                'DocumentSnapshot added with ID: ${doc.id}'));
+                        // db.collection("Complaints").add(complaint).then(
+                        //     (DocumentReference doc) => print(
+                        //         'DocumentSnapshot added with ID: ${doc.id}'));
+                        db
+                            .collection('Student')
+                            .doc(docid)
+                            .collection('Complaints')
+                            .doc()
+                            .set(complaint);
                       },
                       child: const Text("submit"),
                     )

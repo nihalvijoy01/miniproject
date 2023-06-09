@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/add_students.dart';
 import 'package:flutter_application_1/pages/attendence.dart';
 import 'package:flutter_application_1/pages/canteen_page.dart';
 import 'package:flutter_application_1/pages/cleaning_page.dart';
@@ -76,6 +77,10 @@ class MyIcon extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => WardenAttendence()));
               }
+              if (id == '5') {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddStudents()));
+              }
             }
           },
           highlightColor: Colors.transparent,
@@ -91,7 +96,10 @@ class MyIcon extends StatelessWidget {
               const SizedBox(
                 height: 6,
               ),
-              Text(iconText),
+              Text(
+                iconText,
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
             ],
           ),
         ),

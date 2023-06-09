@@ -10,8 +10,7 @@ class WardenCleaning extends StatefulWidget {
 }
 
 class _WardenCleaningState extends State<WardenCleaning> {
-
-   List<String> docIDs = [];
+  List<String> docIDs = [];
 
   //get docIds
 
@@ -24,6 +23,7 @@ class _WardenCleaningState extends State<WardenCleaning> {
               docIDs.add(document.reference.id);
             }));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +32,7 @@ class _WardenCleaningState extends State<WardenCleaning> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Text("Cleaning Oders",
+              Text("Cleaning Orders",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
               SizedBox(
                 height: 40,
@@ -58,7 +58,6 @@ class _WardenCleaningState extends State<WardenCleaning> {
           ),
         ),
       ),
-
     );
   }
 }

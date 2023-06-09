@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 final db = FirebaseFirestore.instance;
 final mycontroller = TextEditingController();
+final FirebaseAuth auth = FirebaseAuth.instance;
 
 class MyCleaning extends StatelessWidget {
   const MyCleaning({super.key});
@@ -37,12 +39,20 @@ class MyCleaning extends StatelessWidget {
             ElevatedButton(
                 onPressed: () {
                   print(mycontroller.text);
+                  final User? user = auth.currentUser;
+                  final String? docid = user?.uid;
                   final cleaning = <String, dynamic>{
                     "instructions": mycontroller.text,
                   };
-                  db.collection("CleaningOrders").add(cleaning).then(
-                      (DocumentReference doc) =>
-                          print('DocumentSnapshot added with ID: ${doc.id}'));
+                  // db.collection("CleaningOrders").add(cleaning).then(
+                  //     (DocumentReference doc) =>
+                  //         print('DocumentSnapshot added with ID: ${doc.id}'));
+                  db
+                      .collection('Student')
+                      .doc(docid)
+                      .collection('CleaningOrders')
+                      .doc()
+                      .set(cleaning);
                 },
                 child: const Text("Place Order"))
           ],

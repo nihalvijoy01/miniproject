@@ -6,13 +6,18 @@ import 'package:flutter_application_1/components/bottom_navbar.dart';
 
 import 'package:flutter_application_1/components/my_icon.dart';
 import 'package:flutter_application_1/pages/canteen_page.dart';
+import 'package:flutter_application_1/pages/login.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   //sign user out method
-  void signUserOut() {
+  Future<void> signUserOut(BuildContext context) async {
     FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
   }
 
   @override
@@ -24,7 +29,6 @@ class HomePage extends StatelessWidget {
         body: SafeArea(
           child: Center(
               child: Column(
-
             children: [
               SizedBox(
                 height: 20,
@@ -34,12 +38,17 @@ class HomePage extends StatelessWidget {
                   Text(
                     "Student Dashboard!",
                     textAlign: TextAlign.start,
-                    style: const TextStyle(fontSize: 30, color: Colors.black87,fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 30,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     width: 60,
                   ),
-                  IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))
+                  IconButton(
+                      onPressed: () => signUserOut(context),
+                      icon: Icon(Icons.logout))
                 ],
               ),
               SizedBox(
@@ -79,7 +88,7 @@ class HomePage extends StatelessWidget {
               ),
 
               //icon 3
- 
+
               Row(
                 children: [
                   const SizedBox(

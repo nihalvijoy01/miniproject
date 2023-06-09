@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/base_layout.dart';
+import 'package:flutter_application_1/components/bottom_navbar.dart';
 
 import '../components/canteen_button.dart';
 
@@ -49,6 +50,7 @@ class _MyCanteenState extends State<MyCanteen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNav(),
       appBar: AppBar(
         title: Text('Canteen Menu'),
       ),

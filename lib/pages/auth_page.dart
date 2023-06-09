@@ -8,7 +8,7 @@ import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
   AuthPage({required this.userType, super.key});
-  UserType? userType;
+  String userType;
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +16,10 @@ class AuthPage extends StatelessWidget {
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          //user is logged in
-          if (snapshot.hasData && userType == UserType.Student) {
+          //user is logged inStudent
+          if (snapshot.hasData && userType == 'warden') {
             return HomePage();
-          } else if (snapshot.hasData && userType == UserType.Warden) {
+          } else if (snapshot.hasData && userType == 'student') {
             return WardenHome();
           }
           //user is not logged in

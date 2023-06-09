@@ -33,17 +33,29 @@ class _WardenComplaintsState extends State<WardenComplaints> {
   //documentIds
 
   List<String> docIDs = [];
+  List<String> studentIDs = [];
 
   //get docIds
 
   Future getDocId() async {
     await FirebaseFirestore.instance
-        .collection("Complaints")
+        .collection("Student")
         .get()
         .then((snapshot) => snapshot.docs.forEach((document) {
-              print(document.reference);
-              docIDs.add(document.reference.id);
+              studentIDs.add(document.reference.id);
             }));
+
+    for (String docId in studentIDs) {
+      await FirebaseFirestore.instance
+          .collection("Student")
+          .doc(docId)
+          .collection("Complaints")
+          .get()
+          .then((snapshot) => snapshot.docs.forEach((document) {
+                print(document.reference.id);
+                docIDs.add(document.reference.id);
+              }));
+    }
   }
 
   @override
@@ -69,7 +81,10 @@ class _WardenComplaintsState extends State<WardenComplaints> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ListTile(
-                            title: GetComplaints(documentId: docIDs[index]),
+                            title: GetComplaints(
+                              documentId: docIDs[index],
+                              studentId: studentIDs[index],
+                            ),
                             tileColor: Colors.grey[300],
                           ),
                         );
