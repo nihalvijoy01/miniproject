@@ -11,6 +11,7 @@ import 'package:flutter_application_1/components/my_textfield.dart';
 import 'package:flutter_application_1/components/user_button.dart';
 import 'package:flutter_application_1/pages/auth_page.dart';
 import 'package:flutter_application_1/pages/home_page.dart';
+import 'package:flutter_application_1/pages/student_homepage.dart';
 import 'package:flutter_application_1/pages/warden_home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
           if (role == 'student' && hostel == selectedHostel) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomePage()),
+              MaterialPageRoute(builder: (context) => MyStudentHome()),
             );
           } else if (role == 'warden' && hostel == selectedHostel) {
             Navigator.pushReplacement(
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     DecoratedBox(
                       decoration: BoxDecoration(
-                          color: Colors.grey[300],
+                          color: Color(0xffcaf0f8),
                           border: Border.all(width: 0.5),
                           borderRadius: BorderRadius.circular(50),
                           boxShadow: <BoxShadow>[
@@ -209,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
 
                           dropdownColor:
-                              Colors.grey[200], //dropdown background color
+                              Color(0xffcaf0f8), //dropdown background color
                           underline: Container(), //remove underline
                         ),
                       ),

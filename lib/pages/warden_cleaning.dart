@@ -10,54 +10,131 @@ class WardenCleaning extends StatefulWidget {
 }
 
 class _WardenCleaningState extends State<WardenCleaning> {
-  List<String> docIDs = [];
-
-  //get docIds
-
-  Future getDocId() async {
-    await FirebaseFirestore.instance
-        .collection("CleaningOrders")
-        .get()
-        .then((snapshot) => snapshot.docs.forEach((document) {
-              print(document.reference);
-              docIDs.add(document.reference.id);
-            }));
+  void updateActiveStatus(String studentId, String complaintId, bool isActive) {
+    FirebaseFirestore.instance
+        .collection('Student')
+        .doc(studentId)
+        .collection('Complaints')
+        .doc(complaintId)
+        .update({'active_status': !isActive});
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text("Cleaning Orders",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-              SizedBox(
-                height: 40,
-              ),
-              Expanded(
-                  child: FutureBuilder(
-                future: getDocId(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                      itemCount: docIDs.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            title: GetCleaning(documentId: docIDs[index]),
-                            tileColor: Colors.grey[300],
-                          ),
-                        );
-                      });
-                },
-              )),
-            ],
-          ),
+    return Scaffold(backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text('View Cleaning Orders'),
         ),
-      ),
-    );
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('Student').snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            }
+
+            if (snapshot.data!.docs.isEmpty) {
+              return Text('No students found.');
+            }
+
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                final studentId = document.id;
+                final studentData = document.data() as Map<String, dynamic>;
+                final roomNumber = studentData['room'];
+
+                return StreamBuilder<QuerySnapshot>(
+                  stream: GetCleaning.getComplaintsStream(studentId),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> complaintSnapshot) {
+                    if (complaintSnapshot.hasError) {
+                      return Text('Error: ${complaintSnapshot.error}');
+                    }
+
+                    if (complaintSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+
+                    if (complaintSnapshot.data!.docs.isEmpty) {
+                      return SizedBox
+                          .shrink(); // Skip rendering if no complaints for the student
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Room Number: $roomNumber',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        ListView(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: complaintSnapshot.data!.docs
+                              .map((DocumentSnapshot complaintDoc) {
+                            final complaintData =
+                                complaintDoc.data() as Map<String, dynamic>;
+                            final complaintTitle =
+                                complaintData['Subject'] ?? '';
+                            final complaintDescription =
+                                complaintData['description'] ?? '';
+                            final isActive =
+                                complaintData['active_status'] ?? false;
+
+                            String activeStatusText =
+                                isActive ? 'In Progress' : 'Closed';
+
+                            return ListTile(
+                              title: Text(complaintTitle),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(complaintDescription),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Active Status: $activeStatusText',
+                                    style: TextStyle(
+                                      color:
+                                          isActive ? Colors.green : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStatePropertyAll<Color>(
+                                              Colors.black54),
+                                    ),
+                                    onPressed: () {
+                                      updateActiveStatus(
+                                          studentId, complaintDoc.id, isActive);
+                                    },
+                                    child: Text(isActive
+                                        ? 'Close Complaint'
+                                        : 'Reopen Complaint'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Divider(), // Add a divider between students
+                      ],
+                    );
+                  },
+                );
+              }).toList(),
+            );
+          },
+        ),);
   }
 }

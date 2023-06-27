@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home_page.dart';
+import 'package:flutter_application_1/pages/student_homepage.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -16,7 +17,7 @@ class _BottomNavState extends State<BottomNav> {
     });
     if (currentIndex == 0) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => MyStudentHome()));
     }
   }
 
@@ -29,8 +30,8 @@ class _BottomNavState extends State<BottomNav> {
       ),
       child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white.withOpacity(0.9),
-          selectedItemColor: Colors.teal,
+          backgroundColor: Color(0xffade8f4),
+          selectedItemColor: Colors.black,
           //selectedItemColor: Colors.red,
           //unselectedItemColor: Colors.black,
           currentIndex: currentIndex,

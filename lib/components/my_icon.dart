@@ -64,7 +64,7 @@ class MyIcon extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => WardenComplaints()));
+                        builder: (context) => ViewComplaintsPage()));
               }
               if (id == '3') {
                 Navigator.push(context,
@@ -83,15 +83,15 @@ class MyIcon extends StatelessWidget {
               }
             }
           },
-          highlightColor: Colors.transparent,
+          highlightColor: Colors.black26,
           splashColor: Colors.black26,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Ink.image(
                   image: AssetImage(img),
-                  height: 72,
-                  width: 72,
+                  height: 50,
+                  width: 50,
                   fit: BoxFit.cover),
               const SizedBox(
                 height: 6,

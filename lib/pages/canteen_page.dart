@@ -49,74 +49,76 @@ class _MyCanteenState extends State<MyCanteen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNav(),
-      appBar: AppBar(
-        title: Text('Canteen Menu'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Select Day:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            DropdownButtonFormField<String>(
-              value: selectedDay,
-              items: daysOfWeek.map((String day) {
-                return DropdownMenuItem<String>(
-                  value: day,
-                  child: Text(day),
-                );
-              }).toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  selectedDay = value;
-                  menuData = {}; // Reset menu data when selecting a new day
-                  _getMenuByDay();
-                });
-              },
-              decoration: InputDecoration(
-                hintText: 'Select a day',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Menu for $selectedDay:',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8),
-            if (menuData.isNotEmpty)
-              Column(
-                children: [
-                  Text(
-                    'Morning Menu: ${menuData['morning'] ?? ''}',
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Noon Menu: ${menuData['noon'] ?? ''}',
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Night Menu: ${menuData['night'] ?? ''}',
-                  ),
-                ],
-              ),
-            if (menuData.isEmpty)
+    return BaseLayout(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        bottomNavigationBar: BottomNav(),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text('Canteen Menu'),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               Text(
-                'No menu available for $selectedDay',
+                'Select Day:',
                 style: TextStyle(
-                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-          ],
+              DropdownButtonFormField<String>(
+                value: selectedDay,
+                items: daysOfWeek.map((String day) {
+                  return DropdownMenuItem<String>(
+                    value: day,
+                    child: Text(day),
+                  );
+                }).toList(),
+                onChanged: (String? value) {
+                  setState(() {
+                    selectedDay = value;
+                    menuData = {}; // Reset menu data when selecting a new day
+                    _getMenuByDay();
+                  });
+                },
+                decoration: InputDecoration(
+                  hintText: 'Select a day',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Menu for $selectedDay:',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              SizedBox(height: 8),
+              if (menuData.isNotEmpty)
+                Column(
+                  children: [
+                    Text(
+                      'Morning Menu: ${menuData['morning'] ?? ''}',
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Noon Menu: ${menuData['noon'] ?? ''}',
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Night Menu: ${menuData['night'] ?? ''}',
+                    ),
+                  ],
+                ),
+              if (menuData.isEmpty)
+                Text(
+                  'No menu available for $selectedDay',
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

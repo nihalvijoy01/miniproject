@@ -1,145 +1,136 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application_1/components/base_layout.dart';
 import 'package:flutter_application_1/read%20data/get_compalints.dart';
 
-final db = FirebaseFirestore.instance;
-
-// String? compDesc;
-// String? compSub;
-
-// Future<String> getComplaints() async {
-//   String Compsub;
-//   db.collection("Complaints").get().then(
-//     (querySnapshot) {
-//       print("Successfully completed");
-//       for (var docSnapshot in querySnapshot.docs) {
-//         print('${docSnapshot.id} => ${docSnapshot.data()}');
-//         Compsub = docSnapshot.get("Subject");
-//       }
-//     },
-//     onError: (e) => print("Error completing: $e"),
-//   );
-//   return Compsub;
-// }
-
-class WardenComplaints extends StatefulWidget {
-  const WardenComplaints({super.key});
-
-  @override
-  State<WardenComplaints> createState() => _WardenComplaintsState();
-}
-
-class _WardenComplaintsState extends State<WardenComplaints> {
-  //documentIds
-
-  List<String> docIDs = [];
-  List<String> studentIDs = [];
-
-  //get docIds
-
-  Future getDocId() async {
-    await FirebaseFirestore.instance
-        .collection("Student")
-        .get()
-        .then((snapshot) => snapshot.docs.forEach((document) {
-              studentIDs.add(document.reference.id);
-            }));
-
-    for (String docId in studentIDs) {
-      await FirebaseFirestore.instance
-          .collection("Student")
-          .doc(docId)
-          .collection("Complaints")
-          .get()
-          .then((snapshot) => snapshot.docs.forEach((document) {
-                print(document.reference.id);
-                docIDs.add(document.reference.id);
-              }));
-    }
+class ViewComplaintsPage extends StatelessWidget {
+  void updateActiveStatus(String studentId, String complaintId, bool isActive) {
+    FirebaseFirestore.instance
+        .collection('Student')
+        .doc(studentId)
+        .collection('Complaints')
+        .doc(complaintId)
+        .update({'active_status': !isActive});
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Text("Complaints",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-              SizedBox(
-                height: 40,
-              ),
-              Expanded(
-                  child: FutureBuilder(
-                future: getDocId(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                      itemCount: docIDs.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            title: GetComplaints(
-                              documentId: docIDs[index],
-                              studentId: studentIDs[index],
-                            ),
-                            tileColor: Colors.grey[300],
-                          ),
-                        );
-                      });
-                },
-              )),
-            ],
-          ),
+    return BaseLayout(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          title: Text('View Complaints'),
+        ),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('Student').snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            }
+
+            if (snapshot.data!.docs.isEmpty) {
+              return Text('No students found.');
+            }
+
+            return ListView(
+              children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                final studentId = document.id;
+                final studentData = document.data() as Map<String, dynamic>;
+                final roomNumber = studentData['room'];
+
+                return StreamBuilder<QuerySnapshot>(
+                  stream: GetComplaints.getComplaintsStream(studentId),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> complaintSnapshot) {
+                    if (complaintSnapshot.hasError) {
+                      return Text('Error: ${complaintSnapshot.error}');
+                    }
+
+                    if (complaintSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
+
+                    if (complaintSnapshot.data!.docs.isEmpty) {
+                      return SizedBox
+                          .shrink(); // Skip rendering if no complaints for the student
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Room Number: $roomNumber',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        ListView(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: complaintSnapshot.data!.docs
+                              .map((DocumentSnapshot complaintDoc) {
+                            final complaintData =
+                                complaintDoc.data() as Map<String, dynamic>;
+                            final complaintTitle =
+                                complaintData['Subject'] ?? '';
+                            final complaintDescription =
+                                complaintData['description'] ?? '';
+                            final isActive =
+                                complaintData['active_status'] ?? false;
+
+                            String activeStatusText =
+                                isActive ? 'In Progress' : 'Closed';
+
+                            return ListTile(
+                              title: Text(complaintTitle),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(complaintDescription),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Active Status: $activeStatusText',
+                                    style: TextStyle(
+                                      color:
+                                          isActive ? Colors.green : Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStatePropertyAll<Color>(
+                                              Colors.black54),
+                                    ),
+                                    onPressed: () {
+                                      updateActiveStatus(
+                                          studentId, complaintDoc.id, isActive);
+                                    },
+                                    child: Text(isActive
+                                        ? 'Close Complaint'
+                                        : 'Reopen Complaint'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        Divider(), // Add a divider between students
+                      ],
+                    );
+                  },
+                );
+              }).toList(),
+            );
+          },
         ),
       ),
     );
   }
 }
-
-// class Complaints {
-//   final String? compSub;
-  
-
-//   Complaints({
-//     this.compSub,
-//   });
-  
-//   factory Complaints.fromFirestore(
-//     DocumentSnapshot<Map<String, dynamic>> snapshot,
-//     SnapshotOptions? options,
-//   ) {
-//     final data = snapshot.data();
-//     return Complaints(
-//       compSub: data?['Subject'],
-     
-//     );
-//   }
-
-//   Map<String, dynamic> toFirestore() {
-//     return {
-//       if (compSub != null) "name": compSub,
-//     };
-//   }
-// }
-
-// final docRef = db.collection("cities").doc("SF");
-// docRef.get().then(
-//   (DocumentSnapshot doc) {
-//     final data = doc.data() as Map<String, dynamic>;
-//     compSub: data?['Subject'];
-//   },
-//   onError: (e) => print("Error getting document: $e"),
-// );
-
-// Future<String> getSpecie(String petId) async {
-//     DocumentReference documentReference = Complaints.document(petId);
-//     String specie;
-//     await documentReference.get().then((snapshot) {
-//       specie = snapshot.data['specie'].toString();
-//     });
-//     return specie;
-//   }
-

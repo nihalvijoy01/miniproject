@@ -8,7 +8,7 @@ class BaseLayout extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         image: DecorationImage(
-            image: AssetImage("lib/images/grey_bg.jpg"), fit: BoxFit.cover),
+            image: AssetImage("lib/images/blue_bg.jpg"), fit: BoxFit.cover),
       ),
       child: Center(child: child),
     );

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/base_layout.dart';
+import 'package:flutter_application_1/components/my_button.dart';
 
 final _formKey = GlobalKey<FormState>();
 final db = FirebaseFirestore.instance;
@@ -73,12 +74,9 @@ class MyComplaints extends StatelessWidget {
                       height: 40,
                     ),
                     //submitt button
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(Colors.black),
-                      ),
-                      onPressed: () async {
+                    MyButton(
+                      text: "Submit",
+                      onTap: () async {
                         if (_formKey.currentState!.validate()) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -106,7 +104,6 @@ class MyComplaints extends StatelessWidget {
                             .doc()
                             .set(complaint);
                       },
-                      child: const Text("submit"),
                     )
                   ]),
                 ),
