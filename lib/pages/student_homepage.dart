@@ -4,6 +4,7 @@ import 'package:flutter_application_1/components/bottom_navbar.dart';
 import 'package:flutter_application_1/components/db_listview.dart';
 import 'package:flutter_application_1/components/drawer.dart';
 import 'package:flutter_application_1/components/my_icon.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyStudentHome extends StatefulWidget {
   const MyStudentHome({super.key});
@@ -16,13 +17,18 @@ class _MyStudentHomeState extends State<MyStudentHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       bottomNavigationBar: BottomNav(),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
         backgroundColor: Color(0xffade8f4),
         title: Text(
-          "student dashboard",
-          style: TextStyle(color: Colors.black),
+          "STUDENT",
+          style: GoogleFonts.roboto(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2),
         ),
       ),
       endDrawer: MyDrawer(),
@@ -39,16 +45,11 @@ class _MyStudentHomeState extends State<MyStudentHome> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.transparent),
-                      child: MyIcon(
-                        user: 'Student',
-                        id: "1",
-                        img: 'lib/images/canteen(1).png',
-                        iconText: 'canteen',
-                      ),
+                    child: MyIcon(
+                      user: 'Student',
+                      id: "1",
+                      img: 'lib/images/canteen(1).png',
+                      iconText: 'canteen',
                     ),
                   ),
                   Padding(

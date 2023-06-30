@@ -42,11 +42,22 @@ class _MyListViewState extends State<MyListView> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Container(
-        decoration: BoxDecoration(
-            color: Color(0xffade8f4),
-            border: Border.all(color: Colors.black12),
-            borderRadius: BorderRadius.circular(20)),
-        height: 300,
+        decoration: BoxDecoration(boxShadow: [
+          //bottom right shadow is darker
+          BoxShadow(
+              color: Colors.grey.shade500,
+              offset: Offset(4, 4),
+              blurRadius: 15,
+              spreadRadius: 1),
+
+          //top left shadow is lighter
+          BoxShadow(
+              color: Colors.white,
+              offset: Offset(-4, -4),
+              blurRadius: 15,
+              spreadRadius: 1)
+        ], color: Colors.grey[100], borderRadius: BorderRadius.circular(20)),
+        height: 300, 
         child: Column(
           children: [
             // Days of week

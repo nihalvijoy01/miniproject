@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/base_layout.dart';
 import 'package:flutter_application_1/read%20data/get_cleaning.dart';
 
 class WardenCleaning extends StatefulWidget {
@@ -14,16 +15,16 @@ class _WardenCleaningState extends State<WardenCleaning> {
     FirebaseFirestore.instance
         .collection('Student')
         .doc(studentId)
-        .collection('Complaints')
+        .collection('CleaningOrders')
         .doc(complaintId)
         .update({'active_status': !isActive});
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: Colors.transparent,
+    return BaseLayout(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text('View Cleaning Orders'),
@@ -51,81 +52,78 @@ class _WardenCleaningState extends State<WardenCleaning> {
                 final roomNumber = studentData['room'];
 
                 return StreamBuilder<QuerySnapshot>(
-                  stream: GetCleaning.getComplaintsStream(studentId),
+                  stream: GetCleaning.GetCleaningStream(studentId),
                   builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> complaintSnapshot) {
-                    if (complaintSnapshot.hasError) {
-                      return Text('Error: ${complaintSnapshot.error}');
+                      AsyncSnapshot<QuerySnapshot> cleaningSnapshot) {
+                    if (cleaningSnapshot.hasError) {
+                      return Text('Error: ${cleaningSnapshot.error}');
                     }
 
-                    if (complaintSnapshot.connectionState ==
+                    if (cleaningSnapshot.connectionState ==
                         ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     }
 
-                    if (complaintSnapshot.data!.docs.isEmpty) {
+                    if (cleaningSnapshot.data!.docs.isEmpty) {
                       return SizedBox
                           .shrink(); // Skip rendering if no complaints for the student
                     }
 
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'Room Number: $roomNumber',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
-                        ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: complaintSnapshot.data!.docs
-                              .map((DocumentSnapshot complaintDoc) {
-                            final complaintData =
-                                complaintDoc.data() as Map<String, dynamic>;
-                            final complaintTitle =
-                                complaintData['Subject'] ?? '';
-                            final complaintDescription =
-                                complaintData['description'] ?? '';
-                            final isActive =
-                                complaintData['active_status'] ?? false;
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: cleaningSnapshot.data!.docs
+                                .map((DocumentSnapshot cleaningDoc) {
+                              final cleaningData =
+                                  cleaningDoc.data() as Map<String, dynamic>;
+                              final instructions =
+                                  cleaningData['instructions'] ?? '';
+                              final isActive =
+                                  cleaningData['active_status'] ?? false;
 
-                            String activeStatusText =
-                                isActive ? 'In Progress' : 'Closed';
+                              String activeStatusText =
+                                  isActive ? 'In Progress' : 'Closed';
 
-                            return ListTile(
-                              title: Text(complaintTitle),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(complaintDescription),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    'Active Status: $activeStatusText',
-                                    style: TextStyle(
-                                      color:
-                                          isActive ? Colors.green : Colors.red,
-                                      fontWeight: FontWeight.bold,
+                              return ListTile(
+                                title: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(instructions),
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll<Color>(
+                                                isActive
+                                                    ? Colors.green
+                                                    : Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        updateActiveStatus(studentId,
+                                            cleaningDoc.id, isActive);
+                                      },
+                                      child: Text(isActive
+                                          ? 'Close order'
+                                          : 'Reopen order'),
                                     ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStatePropertyAll<Color>(
-                                              Colors.black54),
-                                    ),
-                                    onPressed: () {
-                                      updateActiveStatus(
-                                          studentId, complaintDoc.id, isActive);
-                                    },
-                                    child: Text(isActive
-                                        ? 'Close Complaint'
-                                        : 'Reopen Complaint'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
                         Divider(), // Add a divider between students
                       ],
@@ -135,6 +133,8 @@ class _WardenCleaningState extends State<WardenCleaning> {
               }).toList(),
             );
           },
-        ),);
+        ),
+      ),
+    );
   }
 }

@@ -61,7 +61,7 @@ class MyComplaints extends StatelessWidget {
                             enabledBorder: OutlineInputBorder()),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'subject must be entered';
+                            return 'details must be entered';
                           }
                           return null;
                         },

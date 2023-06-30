@@ -38,95 +38,94 @@ class ViewComplaintsPage extends StatelessWidget {
               return Text('No students found.');
             }
 
-            return ListView(
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                final studentId = document.id;
-                final studentData = document.data() as Map<String, dynamic>;
-                final roomNumber = studentData['room'];
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                  final studentId = document.id;
+                  final studentData = document.data() as Map<String, dynamic>;
+                  final roomNumber = studentData['room'];
 
-                return StreamBuilder<QuerySnapshot>(
-                  stream: GetComplaints.getComplaintsStream(studentId),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> complaintSnapshot) {
-                    if (complaintSnapshot.hasError) {
-                      return Text('Error: ${complaintSnapshot.error}');
-                    }
+                  return StreamBuilder<QuerySnapshot>(
+                    stream: GetComplaints.getComplaintsStream(studentId),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> complaintSnapshot) {
+                      if (complaintSnapshot.hasError) {
+                        return Text('Error: ${complaintSnapshot.error}');
+                      }
 
-                    if (complaintSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
+                      if (complaintSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
 
-                    if (complaintSnapshot.data!.docs.isEmpty) {
-                      return SizedBox
-                          .shrink(); // Skip rendering if no complaints for the student
-                    }
+                      if (complaintSnapshot.data!.docs.isEmpty) {
+                        return SizedBox
+                            .shrink(); // Skip rendering if no complaints for the student
+                      }
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Room Number: $roomNumber',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: complaintSnapshot.data!.docs
-                              .map((DocumentSnapshot complaintDoc) {
-                            final complaintData =
-                                complaintDoc.data() as Map<String, dynamic>;
-                            final complaintTitle =
-                                complaintData['Subject'] ?? '';
-                            final complaintDescription =
-                                complaintData['description'] ?? '';
-                            final isActive =
-                                complaintData['active_status'] ?? false;
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Room Number: $roomNumber',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ListView(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            children: complaintSnapshot.data!.docs
+                                .map((DocumentSnapshot complaintDoc) {
+                              final complaintData =
+                                  complaintDoc.data() as Map<String, dynamic>;
+                              final complaintTitle =
+                                  complaintData['Subject'] ?? '';
+                              final complaintDescription =
+                                  complaintData['description'] ?? '';
+                              final isActive =
+                                  complaintData['active_status'] ?? false;
 
-                            String activeStatusText =
-                                isActive ? 'In Progress' : 'Closed';
+                              String activeStatusText =
+                                  isActive ? 'In Progress' : 'Closed';
 
-                            return ListTile(
-                              title: Text(complaintTitle),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(complaintDescription),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    'Active Status: $activeStatusText',
-                                    style: TextStyle(
-                                      color:
-                                          isActive ? Colors.green : Colors.red,
-                                      fontWeight: FontWeight.bold,
+                              return ListTile(
+                                title: Text(complaintTitle),
+                                subtitle: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(complaintDescription),
+                                    ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStatePropertyAll<Color>(
+                                                isActive
+                                                    ? Colors.green
+                                                    : Colors.red),
+                                      ),
+                                      onPressed: () {
+                                        updateActiveStatus(studentId,
+                                            complaintDoc.id, isActive);
+                                      },
+                                      child: Text(
+                                          isActive ? 'In Progress' : 'Closed'),
                                     ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStatePropertyAll<Color>(
-                                              Colors.black54),
-                                    ),
-                                    onPressed: () {
-                                      updateActiveStatus(
-                                          studentId, complaintDoc.id, isActive);
-                                    },
-                                    child: Text(isActive
-                                        ? 'Close Complaint'
-                                        : 'Reopen Complaint'),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                        Divider(), // Add a divider between students
-                      ],
-                    );
-                  },
-                );
-              }).toList(),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          Divider(), // Add a divider between students
+                        ],
+                      );
+                    },
+                  );
+                }).toList(),
+              ),
             );
           },
         ),

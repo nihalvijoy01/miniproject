@@ -93,9 +93,9 @@ class _AddStudentsState extends State<AddStudents> {
           child: Column(
         children: [
           const Text(
-            "Add Students",
+            "SIGN UP STUDENTS",
             style: TextStyle(
-                color: Colors.black, fontSize: 35, fontWeight: FontWeight.bold),
+                color: Colors.black, fontSize: 30, fontWeight: FontWeight.w600),
           ),
           const SizedBox(
             height: 30,

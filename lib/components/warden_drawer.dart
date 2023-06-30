@@ -1,16 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/pages/change_password.dart';
-import 'package:flutter_application_1/pages/cleaning_page.dart';
+import 'package:flutter_application_1/pages/add_students.dart';
+import 'package:flutter_application_1/pages/warden_cleaning.dart';
+import 'package:flutter_application_1/pages/warden_complaint.dart';
 
-import '../pages/complaint_page.dart';
 import '../pages/login.dart';
 
-class MyDrawer extends StatelessWidget {
-  MyDrawer({super.key});
+class WardenDrawer extends StatelessWidget {
+  WardenDrawer({super.key});
   final style = TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
 
-  //sign user out method
   Future<void> signUserOut(BuildContext context) async {
     FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
@@ -40,8 +39,10 @@ class MyDrawer extends StatelessWidget {
                   style: style,
                 ),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyComplaints()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewComplaintsPage()));
                 },
               ),
               ListTile(
@@ -51,21 +52,34 @@ class MyDrawer extends StatelessWidget {
                   style: style,
                 ),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MyCleaning()));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.password_outlined),
-                title: Text(
-                  "Change Password",
-                  style: style,
-                ),
-                onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ChangePasswordPage()));
+                          builder: (context) => WardenCleaning()));
+                },
+              ),
+              // ListTile(
+              //   leading: Icon(Icons.password_outlined),
+              //   title: Text(
+              //     "Change Password",
+              //     style: style,
+              //   ),
+              //   onTap: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: (context) => ChangePasswordPage()));
+              //   },
+              // ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text(
+                  "Add Students",
+                  style: style,
+                ),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddStudents()));
                 },
               ),
               ListTile(

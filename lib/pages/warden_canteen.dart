@@ -40,6 +40,11 @@ class _WardenCanteenState extends State<WardenCanteen> {
     }
   }
 
+  void _refreshPage() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => WardenCanteen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
@@ -148,7 +153,6 @@ class _WardenCanteenState extends State<WardenCanteen> {
                     style: const ButtonStyle(
                       backgroundColor:
                           MaterialStatePropertyAll<Color>(Colors.black),
-          
                     ),
                     onPressed: () {
                       // Handle menu update logic here
@@ -157,6 +161,7 @@ class _WardenCanteenState extends State<WardenCanteen> {
                       print('Noon Menu: $noonMenu');
                       print('Night Menu: $nightMenu');
                       _updateMenu();
+                      _refreshPage();
                     },
                     child: Text('Update'),
                   ),

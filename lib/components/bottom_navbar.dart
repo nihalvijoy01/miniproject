@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home_page.dart';
 import 'package:flutter_application_1/pages/student_homepage.dart';
+import 'package:flutter_application_1/pages/view_profile.dart';
+
+import '../pages/login.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -19,6 +23,22 @@ class _BottomNavState extends State<BottomNav> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => MyStudentHome()));
     }
+    if (currentIndex == 1) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => ViewProfile()));
+    }
+    if (currentIndex == 2) {
+      signUserOut(context);
+    }
+  }
+
+  //sign user out method
+  Future<void> signUserOut(BuildContext context) async {
+    FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
   }
 
   @override

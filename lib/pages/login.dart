@@ -13,6 +13,7 @@ import 'package:flutter_application_1/pages/auth_page.dart';
 import 'package:flutter_application_1/pages/home_page.dart';
 import 'package:flutter_application_1/pages/student_homepage.dart';
 import 'package:flutter_application_1/pages/warden_home.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({super.key});
@@ -55,18 +56,13 @@ class _LoginPageState extends State<LoginPage> {
             await _firestore.collection('users').doc(user.uid).get();
 
         if (snapshot.exists) {
-          final String role = snapshot['role'];
+          // final String role = snapshot['role'];
           final String hostel = snapshot['hostel'];
 
-          if (role == 'student' && hostel == selectedHostel) {
+          if (hostel == selectedHostel) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => MyStudentHome()),
-            );
-          } else if (role == 'warden' && hostel == selectedHostel) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => WardenHome()),
+              MaterialPageRoute(builder: (context) => AuthPage()),
             );
           }
         }
@@ -114,13 +110,12 @@ class _LoginPageState extends State<LoginPage> {
 
                     SizedBox(height: 20),
                     //app name
-                    Text(
-                      'HostelEase',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 35,
-                      ),
-                    ),
+                    Text('HostelEase',
+                        style: GoogleFonts.inter(
+                            color: Colors.black,
+                            fontSize: 30,
+                            letterSpacing: 1.5,
+                            fontWeight: FontWeight.w500)),
                     const SizedBox(height: 20),
 
                     //user class

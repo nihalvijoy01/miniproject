@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_1/pages/login.dart';
 import 'package:flutter_application_1/pages/student_homepage.dart';
 import 'firebase_options.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 UserType? userType;
 void main() async {
@@ -20,6 +21,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: LoginPage());
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AuthPage(),
+        theme: _buildTheme());
   }
+}
+
+ThemeData _buildTheme() {
+  var baseTheme = ThemeData();
+
+  return baseTheme.copyWith(
+    textTheme: GoogleFonts.interTextTheme(baseTheme.textTheme),
+  );
 }

@@ -3,6 +3,9 @@ import 'package:flutter_application_1/pages/add_students.dart';
 import 'package:flutter_application_1/pages/attendence.dart';
 import 'package:flutter_application_1/pages/canteen_page.dart';
 import 'package:flutter_application_1/pages/cleaning_page.dart';
+import 'package:flutter_application_1/pages/dummy.dart';
+import 'package:flutter_application_1/pages/view_cleaning.dart';
+import 'package:flutter_application_1/pages/view_complaints.dart';
 import 'package:flutter_application_1/pages/warden_attendence.dart';
 import 'package:flutter_application_1/pages/warden_canteen.dart';
 import 'package:flutter_application_1/pages/warden_cleaning.dart';
@@ -43,11 +46,11 @@ class MyIcon extends StatelessWidget {
               }
               if (id == "2") {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyComplaints()));
+                    MaterialPageRoute(builder: (context) => ComplaintsPage()));
               }
               if (id == '3') {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyCleaning()));
+                    MaterialPageRoute(builder: (context) => ViewCleaning()));
               }
               if (id == '4') {
                 Navigator.push(context,
@@ -72,10 +75,8 @@ class MyIcon extends StatelessWidget {
               }
 
               if (id == '4') {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => WardenAttendence()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MarkAttendence()));
               }
               if (id == '5') {
                 Navigator.push(context,
