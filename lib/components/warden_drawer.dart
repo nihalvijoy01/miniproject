@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/add_students.dart';
+import 'package:flutter_application_1/pages/view_suggestions.dart';
 import 'package:flutter_application_1/pages/warden_cleaning.dart';
 import 'package:flutter_application_1/pages/warden_complaint.dart';
 
@@ -80,6 +81,19 @@ class WardenDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => AddStudents()));
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.menu),
+                title: Text(
+                  "Menu Suggestion",
+                  style: style,
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ViewMenuSuggestion()));
                 },
               ),
               ListTile(

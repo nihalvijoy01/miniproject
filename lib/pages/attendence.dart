@@ -19,6 +19,7 @@ final User? user = auth.currentUser;
 final String? docid = user?.uid;
 List<DateTime> dates1 = [];
 List<String> dates = [];
+List<bool> isPresent = [];
 
 class _MyAttendenceState extends State<MyAttendence> {
   Future<void> getAttendance() async {
@@ -28,12 +29,19 @@ class _MyAttendenceState extends State<MyAttendence> {
           .doc(docid)
           .collection('Attendance')
           .get();
+      print(snapshot);
       List<String> names = snapshot.docs
           .map((doc) => (doc.data() as Map<String, dynamic>)['date'] as String)
           .toList();
+      List<bool> present = snapshot.docs
+          .map((doc) =>
+              (doc.data() as Map<String, dynamic>)['isPresent'] as bool)
+          .toList();
+      print(present);
 
       setState(() {
         dates = names;
+        isPresent = present;
       });
     } catch (e) {
       print('Error retrieving attendance: $e');
@@ -46,8 +54,12 @@ class _MyAttendenceState extends State<MyAttendence> {
 
   @override
   Widget build(BuildContext context) {
+    int count = 0;
     for (var i = 0; i < dates.length; i++) {
       dates1.add(DateTime.parse(dates[i]));
+      if (isPresent[i] == false) {
+        count++;
+      }
     }
     print(dates1);
 
@@ -73,16 +85,15 @@ class _MyAttendenceState extends State<MyAttendence> {
                 calendarBuilders: CalendarBuilders(
                   // Mark the dates in 'dates1' with green background color
                   markerBuilder: (context, day, events) {
-                    for (DateTime d in dates1) {
-                      if (day.day == d.day &&
-                          day.month == d.month &&
-                          day.year == d.year) {
+                    for (var i = 0; i < dates1.length; i++) {
+                      if (day.day == dates1[i].day &&
+                          day.month == dates1[i].month &&
+                          day.year == dates1[i].year) {
                         return Container(
                           margin: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.green,
-                          ),
+                              shape: BoxShape.circle,
+                              color: isPresent[i] ? Colors.green : Colors.red),
                           child: Center(
                             child: Text(
                               '${day.day}',
@@ -97,6 +108,10 @@ class _MyAttendenceState extends State<MyAttendence> {
                   },
                 ),
               ),
+              SizedBox(
+                height: 30,
+              ),
+              Text("No of days absent: ${count}")
             ],
           ),
         ),

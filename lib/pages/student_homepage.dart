@@ -49,7 +49,7 @@ class _MyStudentHomeState extends State<MyStudentHome> {
                       user: 'Student',
                       id: "1",
                       img: 'lib/images/canteen(1).png',
-                      iconText: 'canteen',
+                      iconText: 'Menu Suggestions',
                     ),
                   ),
                   Padding(

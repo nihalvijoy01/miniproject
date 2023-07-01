@@ -4,6 +4,7 @@ import 'package:flutter_application_1/pages/attendence.dart';
 import 'package:flutter_application_1/pages/canteen_page.dart';
 import 'package:flutter_application_1/pages/cleaning_page.dart';
 import 'package:flutter_application_1/pages/dummy.dart';
+import 'package:flutter_application_1/pages/mess_suggestion.dart';
 import 'package:flutter_application_1/pages/view_cleaning.dart';
 import 'package:flutter_application_1/pages/view_complaints.dart';
 import 'package:flutter_application_1/pages/warden_attendence.dart';
@@ -42,7 +43,7 @@ class MyIcon extends StatelessWidget {
             if (user == 'Student') {
               if (id == "1") {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyCanteen()));
+                    MaterialPageRoute(builder: (context) => MenuSuggestion()));
               }
               if (id == "2") {
                 Navigator.push(context,

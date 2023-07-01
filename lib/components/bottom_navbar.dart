@@ -23,10 +23,7 @@ class _BottomNavState extends State<BottomNav> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => MyStudentHome()));
     }
-    if (currentIndex == 1) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ViewProfile()));
-    }
+
     if (currentIndex == 2) {
       signUserOut(context);
     }
