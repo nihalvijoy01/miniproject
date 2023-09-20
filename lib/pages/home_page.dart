@@ -1,62 +1,124 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/components/base_layout.dart';
+import 'package:flutter_application_1/components/bottom_navbar.dart';
+import 'package:flutter_application_1/components/db_listview.dart';
 
 import 'package:flutter_application_1/components/my_icon.dart';
 import 'package:flutter_application_1/pages/canteen_page.dart';
+import 'package:flutter_application_1/pages/login.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   //sign user out method
-  void signUserOut() {
+  Future<void> signUserOut(BuildContext context) async {
     FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(actions: [
-        IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))
-      ]),
-      body: Center(
-          child: Column(
-        children: [
-          const SizedBox(
-            height: 25,
-          ),
-          //icon 1
-
-          Row(
+    return BaseLayout(
+      child: Scaffold(
+        bottomNavigationBar: BottomNav(),
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Center(
+              child: Column(
             children: [
               SizedBox(
-                width: 20,
+                height: 20,
               ),
-              MyIcon(
-                img: 'lib/images/canteen.png',
-                iconText: 'canteen',
+              Row(
+                children: [
+                  Text(
+                    "Student Dashboard!",
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontSize: 30,
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    width: 60,
+                  ),
+                  IconButton(
+                      onPressed: () => signUserOut(context),
+                      icon: Icon(Icons.logout))
+                ],
               ),
+              SizedBox(
+                height: 80,
+              ),
+              //icon 1
 
+              Row(
+                children: const [
+                  SizedBox(
+                    height: 10,
+                    width: 40,
+                  ),
+                  MyIcon(
+                    user: 'Student',
+                    id: "1",
+                    img: 'lib/images/canteen(1).png',
+                    iconText: 'canteen',
+                  ),
+
+                  SizedBox(
+                    height: 10,
+                    width: 100,
+                  ),
+
+                  //icon 2
+                  MyIcon(
+                    user: 'Student',
+                    id: "2",
+                    img: 'lib/images/complain (2).png',
+                    iconText: 'complaints',
+                  ),
+                ],
+              ),
               const SizedBox(
-                height: 10,
-                width: 50,
+                height: 30,
               ),
 
-              //icon 2
-              MyIcon(
-                img: 'lib/images/complain.png',
-                iconText: 'complaints',
-              ),
+              //icon 3
+
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  MyIcon(
+                      user: 'Student',
+                      id: "3",
+                      img: 'lib/images/oosouji.png',
+                      iconText: 'cleaning'),
+                  const SizedBox(
+                    height: 10,
+                    width: 100,
+                  ),
+
+                  //icon 4
+                  MyIcon(
+                      user: 'Student',
+                      id: "4",
+                      img: 'lib/images/calendar.png',
+                      iconText: 'attendence'),
+                ],
+              )
             ],
-          ),
-
-          //icon 3
-
-          //icon 4
-
-          Text("logged in"),
-        ],
-      )),
+          )),
+        ),
+      ),
     );
   }
 }
+
+// 
